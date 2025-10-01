@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo Site</title>
+</head>
+<body>
+<form id = "UserForm">
+    <label for="username"></label>
+    <input type="text" id="username" placeholder="Enter name" required>
+    <label for="email"></label>
+    <input type="email" id="email" placeholder="Email" required>
+    <button type="submit">Submit</button>
+</form>
+
+<form id="get">
+    <button type="button">Get</button>
+    <p id="result"></p>
+</form>
+
+<script>
+    const url = "http://localhost:8080/users";
+
+    document.getElementById("UserForm").addEventListener("submit",async function(event){
+        event.preventDefault();
+
+        const name = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+
+        const user = {
+        name: name,
+        email: email
+        };
+
+        await fetch(url, {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(user)
+        });
+
+        document.getElementById("username").value = "";
+        document.getElementById("email").value = "";
+        alert("submitted!");
+    });
+
+    document.getElementById("get").addEventListener("click", async function (event){
+        event.preventDefault();
+
+        const response = await fetch(url);
+        const data = await response.json();
+        document.getElementById("result").textContent = JSON.stringify(data);
+
+    });
+</script>
+</body>
+</html>
